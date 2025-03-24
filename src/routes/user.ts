@@ -109,7 +109,7 @@ userRouter.put('/user/:id', async (req: Request, res: Response) => {
     }
 })
 
-userRouter.delete("/user/:id", async (req: Request, res: Response) => {
+userRouter.delete("/api/user/:id", async (req: Request, res: Response) => {
     try {
         const id = req.params.id
   
@@ -121,7 +121,7 @@ userRouter.delete("/user/:id", async (req: Request, res: Response) => {
   
         await database.remove(id)
   
-        res.status(StatusCodes.OK).json({ msg: "User deleted" })
+        res.status(StatusCodes.OK).json({ msg: "User deleted Successfuly" })
     } catch (error) {
         console.error("Error deleting user:", error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Internal Server Error" });
