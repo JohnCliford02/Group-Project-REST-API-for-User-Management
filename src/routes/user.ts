@@ -19,20 +19,6 @@ userRouter.get("/users", async (req: Request, res : Response) => {
     }
 })
 
-userRouter.get("/user/:id", async (req : Request, res : Response) => {
-    try {
-        const user: UnitUser = await database.findOne(req.params.id)
-
-        if (!user) {
-          res.status(StatusCodes.NOT_FOUND).json({ error: 'User not found!' })
-        }
-    
-        res.status(StatusCodes.OK).json({ user });
-    } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error })
-    }
-})
-
 userRouter.post("/register", async (req : Request, res: Response) => {
     try {
         const { username, email, password } = req.body;
@@ -56,34 +42,6 @@ userRouter.post("/register", async (req : Request, res: Response) => {
     }
 })
 
-userRouter.post("/login", async (req: Request, res: Response) => {
-    try {
-        const { email, password } = req.body
-  
-        if (!email || !password) {
-          res.status(StatusCodes.BAD_REQUEST).json({ error: "Please provide all the required parameters." })
-        }
-  
-        const user = await database.findByEmail(email)
-  
-        if (!user) {
-          res.status(StatusCodes.NOT_FOUND).json({ error: "No user exists with the email provided." })
-        }
-  
-        const comparePassword = await database.comparePassword(email, password);
-  
-        if (!comparePassword) {
-          res.status(StatusCodes.BAD_REQUEST).json({ error: "Incorrect Password!" })
-        }
-  
-        res.status(StatusCodes.OK).json({ user });
-
-    } catch (error) {
-       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error })
-    }
-})
-
-
 userRouter.put('/user/:id', async (req: Request, res: Response) => {
     
     try {
@@ -106,23 +64,5 @@ userRouter.put('/user/:id', async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({ error })
-    }
-})
-
-userRouter.delete("/user/:id", async (req: Request, res: Response) => {
-    try {
-        const id = req.params.id
-  
-        const user = await database.findOne(id)
-  
-        if (!user) {
-         res.status(StatusCodes.NOT_FOUND).json({ error: "User does not exist" })
-        }
-  
-        await database.remove(id)
-  
-        res.status(StatusCodes.OK).json({ msg: "User deleted" })
-    } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error })
     }
 })
